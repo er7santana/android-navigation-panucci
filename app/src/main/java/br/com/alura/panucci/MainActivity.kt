@@ -133,11 +133,13 @@ class MainActivity : ComponentActivity() {
                                                 navController.navigate(AppDestination.Checkout.route)
                                             }
                                         )
-                                    }
+                                    } ?: LaunchedEffect(Unit) { navController.navigateUp() }
                                 }
                             }
                             composable(AppDestination.Checkout.route) {
-                                CheckoutScreen(products = sampleProducts)
+                                CheckoutScreen(products = sampleProducts, onPopBackStack = {
+                                    navController.navigateUp()
+                                })
                             }
                         }
                     }
