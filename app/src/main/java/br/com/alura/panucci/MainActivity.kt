@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import br.com.alura.panucci.navigation.AppDestination
 import br.com.alura.panucci.navigation.bottomAppBarItems
 import br.com.alura.panucci.sampledata.sampleProductWithImage
@@ -25,6 +26,7 @@ import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
 import br.com.alura.panucci.ui.screens.*
 import br.com.alura.panucci.ui.theme.PanucciTheme
+import java.math.BigDecimal
 
 class MainActivity : ComponentActivity() {
 
@@ -85,8 +87,11 @@ class MainActivity : ComponentActivity() {
                             composable(AppDestination.Highlight.route) {
                                 HighlightsListScreen(
                                     products = sampleProducts,
-                                    onNavigateToDetails = {
-                                        navController.navigate(AppDestination.ProductDetails.route)
+                                    onNavigateToDetails = { product ->
+                                        val promoCode = "ALURA"
+                                        navController.navigate(
+                                            "${AppDestination.ProductDetails.route}/${product.id}?promoCode=${promoCode}"
+                                        )
                                     },
                                     onNavigateToCheckout = {
                                         navController.navigate(AppDestination.Checkout.route)
@@ -97,7 +102,7 @@ class MainActivity : ComponentActivity() {
                                 MenuListScreen(
                                     products = sampleProducts,
                                     onNavigateToDetails = { product ->
-                                        navController.navigate(AppDestination.ProductDetails.route)
+                                        navController.navigate("${AppDestination.ProductDetails.route}/${product.id}")
                                     },
                                 )
                             }
@@ -105,17 +110,31 @@ class MainActivity : ComponentActivity() {
                                 DrinksListScreen(
                                     products = sampleProducts,
                                     onNavigateToDetails = { product ->
-                                        navController.navigate(AppDestination.ProductDetails.route)
+                                        navController.navigate("${AppDestination.ProductDetails.route}/${product.id}")
                                     }
                                 )
                             }
-                            composable(AppDestination.ProductDetails.route) {
-                                ProductDetailsScreen(
-                                    product = sampleProductWithImage,
-                                    onNavigateToCheckout = { product ->
-                                        navController.navigate(AppDestination.Checkout.route)
+                            composable(
+                                route = "${AppDestination.ProductDetails.route}/{productId}?promoCode={promoCode}",
+                                arguments = listOf(navArgument("promoCode") { nullable = true })
+                                ) { backStackEntry ->
+
+                                val promoCode = backStackEntry.arguments?.getString("promoCode")
+                                backStackEntry.arguments?.getString("productId")?.let { productId ->
+                                    sampleProducts.find { it.id == productId }?.let { product ->
+                                        val discount = when(promoCode) {
+                                            "ALURA" -> BigDecimal("0.1")
+                                            else -> BigDecimal.ZERO
+                                        }
+                                        val currentPrice = product.price
+                                        ProductDetailsScreen(
+                                            product = product.copy(price = currentPrice - (currentPrice*discount)),
+                                            onNavigateToCheckout = { product ->
+                                                navController.navigate(AppDestination.Checkout.route)
+                                            }
+                                        )
                                     }
-                                )
+                                }
                             }
                             composable(AppDestination.Checkout.route) {
                                 CheckoutScreen(products = sampleProducts)
