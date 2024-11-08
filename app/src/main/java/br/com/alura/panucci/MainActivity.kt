@@ -3,7 +3,6 @@ package br.com.alura.panucci
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +24,6 @@ import br.com.alura.panucci.ui.components.BottomAppBarItem
 import br.com.alura.panucci.ui.components.PanucciBottomAppBar
 import br.com.alura.panucci.ui.screens.*
 import br.com.alura.panucci.ui.theme.PanucciTheme
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -62,20 +60,51 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         onFabClick = {
-
+                            navController.navigate("checkout") {
+                                launchSingleTop = true
+                            }
                         }
                     ) {
                         NavHost(navController = navController,
                             startDestination = "highlight"
                         ) {
                             composable("highlight") {
-                                HighlightsListScreen(products = sampleProducts)
+                                HighlightsListScreen(
+                                    products = sampleProducts,
+                                    onNavigateToDetails = {
+                                        navController.navigate("productDetails")
+                                    },
+                                    onNavigateToCheckout = {
+                                        navController.navigate("checkout")
+                                    }
+                                )
                             }
                             composable("menu") {
-                                MenuListScreen(products = sampleProducts)
+                                MenuListScreen(
+                                    products = sampleProducts,
+                                    onNavigateToDetails = { product ->
+                                        navController.navigate("productDetails")
+                                    },
+                                )
                             }
                             composable("drinks") {
-                                DrinksListScreen(products = sampleProducts)
+                                DrinksListScreen(
+                                    products = sampleProducts,
+                                    onNavigateToDetails = { product ->
+                                        navController.navigate("productDetails")
+                                    }
+                                )
+                            }
+                            composable("productDetails") {
+                                ProductDetailsScreen(
+                                    product = sampleProductWithImage,
+                                    onNavigateToCheckout = { product ->
+                                        navController.navigate("checkout")
+                                    }
+                                )
+                            }
+                            composable("checkout") {
+                                CheckoutScreen(products = sampleProducts)
                             }
                         }
                     }
