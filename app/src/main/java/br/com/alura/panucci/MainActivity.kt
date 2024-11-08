@@ -17,7 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alura.panucci.sampledata.bottomAppBarItems
+import br.com.alura.panucci.navigation.AppDestination
+import br.com.alura.panucci.navigation.bottomAppBarItems
 import br.com.alura.panucci.sampledata.sampleProductWithImage
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.components.BottomAppBarItem
@@ -48,62 +49,62 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val selectedItem by remember(currentDestination) {
                         val item = currentDestination?.let { destination ->
-                            bottomAppBarItems.find { it.route == destination.route }
+                            bottomAppBarItems.find { it.destination.route == destination.route }
                         } ?: bottomAppBarItems.first()
                         mutableStateOf(item)
                     }
                     PanucciApp(bottomAppBarItemSelected = selectedItem,
                         onBottomAppBarItemSelectedChange = {
-                            navController.navigate(it.route) {
+                            navController.navigate(it.destination.route) {
                                 launchSingleTop = true
-                                popUpTo(it.route)
+                                popUpTo(it.destination.route)
                             }
                         },
                         onFabClick = {
-                            navController.navigate("checkout") {
+                            navController.navigate(AppDestination.Checkout.route) {
                                 launchSingleTop = true
                             }
                         }
                     ) {
                         NavHost(navController = navController,
-                            startDestination = "highlight"
+                            startDestination = AppDestination.Highlight.route
                         ) {
-                            composable("highlight") {
+                            composable(AppDestination.Highlight.route) {
                                 HighlightsListScreen(
                                     products = sampleProducts,
                                     onNavigateToDetails = {
-                                        navController.navigate("productDetails")
+                                        navController.navigate(AppDestination.ProductDetails.route)
                                     },
                                     onNavigateToCheckout = {
-                                        navController.navigate("checkout")
+                                        navController.navigate(AppDestination.Checkout.route)
                                     }
                                 )
                             }
-                            composable("menu") {
+                            composable(AppDestination.Menu.route) {
                                 MenuListScreen(
                                     products = sampleProducts,
                                     onNavigateToDetails = { product ->
-                                        navController.navigate("productDetails")
+                                        navController.navigate(AppDestination.ProductDetails.route)
                                     },
                                 )
                             }
-                            composable("drinks") {
+                            composable(AppDestination.Drinks.route) {
                                 DrinksListScreen(
                                     products = sampleProducts,
                                     onNavigateToDetails = { product ->
-                                        navController.navigate("productDetails")
+                                        navController.navigate(AppDestination.ProductDetails.route)
                                     }
                                 )
                             }
-                            composable("productDetails") {
+                            composable(AppDestination.ProductDetails.route) {
                                 ProductDetailsScreen(
                                     product = sampleProductWithImage,
                                     onNavigateToCheckout = { product ->
-                                        navController.navigate("checkout")
+                                        navController.navigate(AppDestination.Checkout.route)
                                     }
                                 )
                             }
-                            composable("checkout") {
+                            composable(AppDestination.Checkout.route) {
                                 CheckoutScreen(products = sampleProducts)
                             }
                         }

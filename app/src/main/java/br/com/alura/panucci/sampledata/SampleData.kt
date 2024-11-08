@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.RestaurantMenu
 import androidx.compose.material.icons.outlined.LocalBar
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import br.com.alura.panucci.model.Product
+import br.com.alura.panucci.navigation.AppDestination
 import br.com.alura.panucci.ui.components.BottomAppBarItem
 import java.math.BigDecimal
 import kotlin.random.Random
@@ -34,21 +35,3 @@ val sampleProducts = List(10) { index ->
         image = if (index % 2 == 0) "https://picsum.photos/1920/1080" else null
     )
 }
-
-val bottomAppBarItems = listOf(
-    BottomAppBarItem(
-        label = "Destaques",
-        icon = Icons.Filled.AutoAwesome,
-        route = "highlight"
-    ),
-    BottomAppBarItem(
-        label = "Menu",
-        icon = Icons.Filled.RestaurantMenu,
-        route = "menu"
-    ),
-    BottomAppBarItem(
-        label = "Bebidas",
-        icon = Icons.Outlined.LocalBar,
-        route = "drinks"
-    ),
-)
