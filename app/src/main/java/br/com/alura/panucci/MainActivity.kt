@@ -33,6 +33,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
+            LaunchedEffect(Unit) {
+                navController.addOnDestinationChangedListener { _, _, _ ->
+                    val routes = navController.backQueue.map {
+                        it.destination.route
+                    }
+                    Log.i("BackQueue", "onCreate: routes=$routes")
+                }
+            }
+
             val backStackEntryState by navController.currentBackStackEntryAsState()
             val currentDestination = backStackEntryState?.destination
             PanucciTheme {
@@ -47,7 +56,10 @@ class MainActivity : ComponentActivity() {
                     }
                     PanucciApp(bottomAppBarItemSelected = selectedItem,
                         onBottomAppBarItemSelectedChange = {
-                            navController.navigate(it.route)
+                            navController.navigate(it.route) {
+                                launchSingleTop = true
+                                popUpTo(it.route)
+                            }
                         },
                         onFabClick = {
 
