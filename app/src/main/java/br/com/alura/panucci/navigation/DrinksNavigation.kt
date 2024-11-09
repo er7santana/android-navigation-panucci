@@ -1,5 +1,6 @@
 package br.com.alura.panucci.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -20,6 +21,6 @@ fun NavGraphBuilder.drinksScreen(navController: NavHostController) {
     }
 }
 
-fun NavHostController.navigateToDrinks(navOptions: NavOptions? = null) {
+fun NavController.navigateToDrinks(navOptions: NavOptions? = null) {
     navigate(drinksRoute, navOptions)
 }
