@@ -2,7 +2,7 @@ package br.com.alura.panucci.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.screens.DrinksListScreen
@@ -20,8 +20,6 @@ fun NavGraphBuilder.drinksScreen(navController: NavHostController) {
     }
 }
 
-fun NavHostController.navigateToDrinks(builder: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(drinksRoute) {
-        builder()
-    }
+fun NavHostController.navigateToDrinks(navOptions: NavOptions? = null) {
+    navigate(drinksRoute, navOptions)
 }

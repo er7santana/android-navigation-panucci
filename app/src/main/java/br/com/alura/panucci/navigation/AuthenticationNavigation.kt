@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import br.com.alura.panucci.preferences.dataStore
 import br.com.alura.panucci.preferences.userPreferences
 import br.com.alura.panucci.ui.screens.AuthenticationScreen
@@ -29,9 +30,10 @@ fun NavGraphBuilder.authenticationScreen(
                     }
                 }
 
-                navController.navigateToHighlightsList {
+                val navOptions = navOptions {
                     popUpTo(navController.graph.id)
                 }
+                navController.navigateToHighlightsList(navOptions)
             }
         )
     }

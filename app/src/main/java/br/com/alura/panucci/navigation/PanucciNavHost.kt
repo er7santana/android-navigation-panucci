@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import br.com.alura.panucci.ui.components.BottomAppBarItem
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -20,12 +19,6 @@ fun PanucciNavHost(navController: NavHostController, scope: CoroutineScope, cont
         checkoutScreen(navController)
     }
 }
-
-val bottomAppBarItems = listOf(
-    BottomAppBarItem.HighlistsList,
-    BottomAppBarItem.Menu,
-    BottomAppBarItem.Drinks
-)
 
 
 
