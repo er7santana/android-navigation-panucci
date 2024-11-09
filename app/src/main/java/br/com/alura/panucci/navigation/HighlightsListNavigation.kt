@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import br.com.alura.panucci.preferences.dataStore
 import br.com.alura.panucci.preferences.userPreferences
@@ -66,7 +67,7 @@ fun NavGraphBuilder.highlightsListScreen(
                         }
                     )
                 } ?: LaunchedEffect(Unit) {
-                    navController.navigate(authenticationRoute) {
+                    navController.navigateToAuthentication {
                         popUpTo(navController.graph.findStartDestination().id) {
                             inclusive = true
                         }
@@ -77,6 +78,8 @@ fun NavGraphBuilder.highlightsListScreen(
     }
 }
 
-fun NavController.navigateToHighlightsList() {
-    navigate(highlightsListRoute)
+fun NavController.navigateToHighlightsList(builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(highlightsListRoute) {
+        builder()
+    }
 }

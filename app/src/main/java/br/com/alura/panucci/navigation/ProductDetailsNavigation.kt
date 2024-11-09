@@ -3,6 +3,7 @@ package br.com.alura.panucci.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import br.com.alura.panucci.sampledata.sampleProducts
@@ -38,6 +39,8 @@ fun NavGraphBuilder.productDetailsScreen(navController: NavHostController) {
     }
 }
 
-fun NavHostController.navigateToProductDetails(productId: String, promoCode: String? = null) {
-    navigate("$productDetailsRoute/$productId?$promoCodeArgument=$promoCode")
+fun NavHostController.navigateToProductDetails(productId: String, promoCode: String? = null, builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate("$productDetailsRoute/$productId?$promoCodeArgument=$promoCode") {
+        builder()
+    }
 }

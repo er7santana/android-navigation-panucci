@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import br.com.alura.panucci.preferences.dataStore
 import br.com.alura.panucci.preferences.userPreferences
@@ -28,7 +29,7 @@ fun NavGraphBuilder.authenticationScreen(
                     }
                 }
 
-                navController.navigate(highlightsListRoute) {
+                navController.navigateToHighlightsList {
                     popUpTo(navController.graph.id)
                 }
             }
@@ -36,6 +37,8 @@ fun NavGraphBuilder.authenticationScreen(
     }
 }
 
-fun NavController.navigateToAuthentication() {
-    navigate(authenticationRoute)
+fun NavController.navigateToAuthentication(builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(authenticationRoute) {
+        builder()
+    }
 }
