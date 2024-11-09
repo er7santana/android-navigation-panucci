@@ -150,9 +150,7 @@ fun PanucciApp(
                     },
                     actions = {
                         IconButton(onClick = onLogout) {
-                            Icon(
-                                Icons.Filled.ExitToApp, contentDescription = "Sair do app"
-                            )
+                            Icon(Icons.Filled.ExitToApp, contentDescription = "Sair do app")
                         }
                     }
                 )
@@ -167,18 +165,12 @@ fun PanucciApp(
         }
     }, floatingActionButton = {
         if (isShowFab) {
-            FloatingActionButton(
-                onClick = onFabClick
-            ) {
-                Icon(
-                    Icons.Filled.PointOfSale, contentDescription = null
-                )
+            FloatingActionButton(onClick = onFabClick ) {
+                Icon(Icons.Filled.PointOfSale, contentDescription = null)
             }
         }
     }) {
-        Box(
-            modifier = Modifier.padding(it)
-        ) {
+        Box(modifier = Modifier.padding(it) ) {
             content()
         }
     }

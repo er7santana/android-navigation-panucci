@@ -33,7 +33,7 @@ fun NavGraphBuilder.authenticationScreen(
                 val navOptions = navOptions {
                     popUpTo(navController.graph.id)
                 }
-                navController.navigateToHighlightsList(navOptions)
+                navController.navigateToHomeGraph(navOptions)
             }
         )
     }
