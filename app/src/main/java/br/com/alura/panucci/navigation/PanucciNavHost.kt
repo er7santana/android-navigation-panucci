@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun PanucciNavHost(navController: NavHostController, scope: CoroutineScope, context: Context) {
     NavHost(navController = navController,
-        startDestination = AppDestination.Highlight.route
+        startDestination = highlightsListRoute
     ) {
         authenticationScreen(scope, context, navController)
         highlightsListScreen(context, navController)

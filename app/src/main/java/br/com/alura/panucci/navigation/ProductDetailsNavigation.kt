@@ -9,14 +9,18 @@ import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.screens.ProductDetailsScreen
 import java.math.BigDecimal
 
+private const val productDetailsRoute = "productDetails"
+private const val productIdArgument = "productId"
+private const val promoCodeArgument = "promoCode"
+
 fun NavGraphBuilder.productDetailsScreen(navController: NavHostController) {
     composable(
-        route = "${AppDestination.ProductDetails.route}/{productId}?promoCode={promoCode}",
-        arguments = listOf(navArgument("promoCode") { nullable = true })
+        route = "$productDetailsRoute/{$productIdArgument}?$promoCodeArgument={$promoCodeArgument}",
+        arguments = listOf(navArgument(promoCodeArgument) { nullable = true })
     ) { backStackEntry ->
 
-        val promoCode = backStackEntry.arguments?.getString("promoCode")
-        backStackEntry.arguments?.getString("productId")?.let { productId ->
+        val promoCode = backStackEntry.arguments?.getString(promoCodeArgument)
+        backStackEntry.arguments?.getString(productIdArgument)?.let { productId ->
             sampleProducts.find { it.id == productId }?.let { product ->
                 val discount = when (promoCode) {
                     "ALURA" -> BigDecimal("0.1")
@@ -26,10 +30,14 @@ fun NavGraphBuilder.productDetailsScreen(navController: NavHostController) {
                 ProductDetailsScreen(
                     product = product.copy(price = currentPrice - (currentPrice * discount)),
                     onNavigateToCheckout = { product ->
-                        navController.navigate(AppDestination.Checkout.route)
+                        navController.navigateToCheckout()
                     }
                 )
             } ?: LaunchedEffect(Unit) { navController.navigateUp() }
         }
     }
+}
+
+fun NavHostController.navigateToProductDetails(productId: String, promoCode: String? = null) {
+    navigate("$productDetailsRoute/$productId?$promoCodeArgument=$promoCode")
 }

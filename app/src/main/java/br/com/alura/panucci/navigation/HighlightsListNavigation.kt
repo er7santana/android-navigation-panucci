@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -23,11 +24,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlin.random.Random
 
+internal const val highlightsListRoute = "highlight"
+
 fun NavGraphBuilder.highlightsListScreen(
     context: Context,
     navController: NavHostController
 ) {
-    composable(AppDestination.Highlight.route) {
+    composable(highlightsListRoute) {
 
         var user: String? by remember {
             mutableStateOf(null)
@@ -56,16 +59,14 @@ fun NavGraphBuilder.highlightsListScreen(
                         products = sampleProducts,
                         onNavigateToDetails = { product ->
                             val promoCode = "ALURA"
-                            navController.navigate(
-                                "${AppDestination.ProductDetails.route}/${product.id}?promoCode=${promoCode}"
-                            )
+                            navController.navigateToProductDetails(product.id, promoCode)
                         },
                         onNavigateToCheckout = {
-                            navController.navigate(AppDestination.Checkout.route)
+                            navController.navigateToCheckout()
                         }
                     )
                 } ?: LaunchedEffect(Unit) {
-                    navController.navigate(AppDestination.Authentication.route) {
+                    navController.navigate(authenticationRoute) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             inclusive = true
                         }
@@ -74,4 +75,8 @@ fun NavGraphBuilder.highlightsListScreen(
             }
         }
     }
+}
+
+fun NavController.navigateToHighlightsList() {
+    navigate(highlightsListRoute)
 }
