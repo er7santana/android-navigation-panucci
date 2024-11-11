@@ -46,6 +46,8 @@ fun NavGraphBuilder.productDetailsScreen(navController: NavHostController) {
 //                    val productWithDiscount = product.copy(price = currentPrice - (currentPrice * discount))
                     navController.navigateToCheckout()
                 },
+                onTryFindProductAgain = { viewModel.findProductById(productId, promoCode) },
+                onNavigateUp = { navController.navigateUp() }
             )
         } ?: LaunchedEffect(Unit) { navController.navigateUp() }
     }

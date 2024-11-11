@@ -17,25 +17,26 @@ class ProductDetailsViewModel(
     private val dao: ProductDao = ProductDao()
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ProductDetailsUiState())
+    private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun findProductById(id: String, promoCode: String? = null) {
-        dao.findById(id)?.let { product ->
+            _uiState.update { ProductDetailsUiState.Loading }
             viewModelScope.launch {
                 val timeMillis = Random.nextLong(500, 2000)
                 delay(timeMillis)
-                val discount = when (promoCode) {
-                    "ALURA" -> BigDecimal("0.1")
-                    else -> BigDecimal.ZERO
-                }
-                val currentPrice = product.price
 
-                _uiState.update {
-                    it.copy(product = product.copy(price = currentPrice - (currentPrice * discount)))
-                }
+                val dataState = dao.findById(id)?.let { product ->
+                    val discount = when (promoCode) {
+                        "ALURA" -> BigDecimal("0.1")
+                        else -> BigDecimal.ZERO
+                    }
+                    val currentPrice = product.price
+                    ProductDetailsUiState.Success(product.copy(price = currentPrice - (currentPrice * discount)))
+                } ?: ProductDetailsUiState.Failure
+
+                _uiState.update { dataState }
             }
-        }
     }
 
 }
