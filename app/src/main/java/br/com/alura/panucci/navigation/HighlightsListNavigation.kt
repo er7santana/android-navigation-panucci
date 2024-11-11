@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -19,8 +21,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import br.com.alura.panucci.preferences.dataStore
 import br.com.alura.panucci.preferences.userPreferences
-import br.com.alura.panucci.sampledata.sampleProducts
 import br.com.alura.panucci.ui.screens.HighlightsListScreen
+import br.com.alura.panucci.ui.viewmodels.HighlightsListViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlin.random.Random
@@ -56,8 +58,12 @@ fun NavGraphBuilder.highlightsListScreen(
 
             else -> {
                 user?.let {
+
+                    val viewModel = viewModel<HighlightsListViewModel>()
+                    val uiState by viewModel.uiState.collectAsState()
+
                     HighlightsListScreen(
-                        products = sampleProducts,
+                        uiState = uiState,
                         onNavigateToDetails = { product ->
                             val promoCode = "ALURA"
                             navController.navigateToProductDetails(product.id, promoCode)
